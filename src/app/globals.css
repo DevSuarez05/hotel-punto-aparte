@@ -1,26 +1,126 @@
 @import "tailwindcss";
 
+@theme {
+  --color-dark-bg: #0d0d0d;
+  --color-dark-surface: #141414;
+  --color-dark-card: #1e1e1e;
+  --color-dark-elevated: #262626;
+  --color-dark-border: #2e2e2e;
+
+  /* Elegant Gold Accent Palette */
+  --color-gold-300: #f4d068;
+  --color-gold-400: #e6c254;
+  --color-gold-500: #d4af37;
+  --color-gold-600: #b38f24;
+  --color-gold-700: #8c6e18;
+
+  /* Business Card Orange Accent Palette (#E65100) */
+  --color-orange-brand: #e65100;
+  --color-orange-hover: #ff6d00;
+  --color-orange-light: #ff8f00;
+  --color-orange-glow: rgba(230, 81, 0, 0.25);
+
+  /* Neutrals */
+  --color-neutral-dark: #0d0d0d;
+  --color-neutral-gray: #a1a1aa;
+  --color-neutral-light: #ffffff;
+  --color-neutral-pure: #ffffff;
+
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
+  --font-heading: var(--font-heading), Georgia, serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0d0d0d;
+  --foreground: #ffffff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Base Body Styles */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0d0d0d;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
 }
+
+::selection {
+  background-color: rgba(230, 81, 0, 0.4);
+  color: #ffffff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #262626;
+  border-radius: 4px;
+  border: 1px solid #0d0d0d;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e65100;
+}
+
+/* Custom Utility Classes */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #f4d068 40%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-orange-gradient {
+  background: linear-gradient(135deg, #ff8f00 0%, #e65100 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #d4af37 0%, #b38f24 100%);
+}
+
+.bg-gold-gradient-hover:hover {
+  background: linear-gradient(135deg, #e6c254 0%, #d4af37 100%);
+}
+
+.bg-orange-gradient {
+  background: linear-gradient(135deg, #ff6d00 0%, #e65100 100%);
+}
+
+.bg-orange-gradient-hover:hover {
+  background: linear-gradient(135deg, #ff8f00 0%, #ff6d00 100%);
+}
+
+.border-gold-glow {
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+.border-orange-glow {
+  box-shadow: 0 0 15px rgba(230, 81, 0, 0.25);
+}
+
+/* Glassmorphism Card Style */
+.glass-card {
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-hover:hover {
+  background: rgba(30, 30, 30, 0.9);
+  border-color: rgba(230, 81, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(230, 81, 0, 0.15);
+}
+
+
