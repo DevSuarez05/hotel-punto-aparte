@@ -1,0 +1,106 @@
+{
+  "hotelName": "Hotel Punto Aparte",
+  "totalInventoryStock": 23,
+  "currency": "COP",
+  "categories": [
+    {
+      "id": "doble-ac",
+      "categoryCode": "A",
+      "name": "Habitación Doble con Aire Acondicionado",
+      "category": "Categoría A · Doble Confort A/C",
+      "priceNumeric": 140000,
+      "priceFormatted": "$ 140.000 COP",
+      "availableUnits": 5,
+      "bedCategory": "doble",
+      "bedType": "2 Camas Dobles / Queen Size",
+      "climateControl": "ac",
+      "climateLabel": "Aire Acondicionado Climatizado",
+      "maxCapacity": 4,
+      "size": "36 m²",
+      "tags": [
+        "ac",
+        "wifi",
+        "smart_tv",
+        "private_bathroom",
+        "work_desk",
+        "room_service_24_7",
+        "anti_seismic"
+      ],
+      "image": "/assets/images/hotel/habitacion-matrimonial.jpg"
+    },
+    {
+      "id": "doble-ventilador",
+      "categoryCode": "B",
+      "name": "Habitación Doble con Ventilador",
+      "category": "Categoría B · Doble Estándar Ventilador",
+      "priceNumeric": 100000,
+      "priceFormatted": "$ 100.000 COP",
+      "availableUnits": 3,
+      "bedCategory": "doble",
+      "bedType": "2 Camas Matrimoniales Dobles",
+      "climateControl": "fan",
+      "climateLabel": "Ventilador de Alta Potencia",
+      "maxCapacity": 4,
+      "size": "34 m²",
+      "tags": [
+        "fan",
+        "wifi",
+        "smart_tv",
+        "private_bathroom",
+        "room_service_24_7",
+        "anti_seismic"
+      ],
+      "image": "/assets/images/hotel/habitacion-doble-sencilla.jpg"
+    },
+    {
+      "id": "sencilla-ac",
+      "categoryCode": "C",
+      "name": "Habitación Sencilla con Aire Acondicionado",
+      "category": "Categoría C · Sencilla Ejecutiva A/C",
+      "priceNumeric": 80000,
+      "priceFormatted": "$ 80.000 COP",
+      "availableUnits": 8,
+      "bedCategory": "sencilla",
+      "bedType": "1 Cama Queen / Cama Sencilla",
+      "climateControl": "ac",
+      "climateLabel": "Aire Acondicionado",
+      "maxCapacity": 2,
+      "size": "24 m²",
+      "tags": [
+        "ac",
+        "wifi",
+        "smart_tv",
+        "private_bathroom",
+        "hot_water",
+        "work_desk",
+        "safe_box",
+        "anti_seismic"
+      ],
+      "image": "/assets/images/hotel/habitacion-matrimonial.jpg"
+    },
+    {
+      "id": "sencilla-ventilador",
+      "categoryCode": "D",
+      "name": "Habitación Sencilla con Ventilador",
+      "category": "Categoría D · Sencilla Estándar Ventilador",
+      "priceNumeric": 70000,
+      "priceFormatted": "$ 70.000 COP",
+      "availableUnits": 7,
+      "bedCategory": "sencilla",
+      "bedType": "1 Cama Sencilla Confortable",
+      "climateControl": "fan",
+      "climateLabel": "Ventilador Potente",
+      "maxCapacity": 2,
+      "size": "22 m²",
+      "tags": [
+        "fan",
+        "wifi",
+        "smart_tv",
+        "private_bathroom",
+        "room_service_24_7",
+        "anti_seismic"
+      ],
+      "image": "/assets/images/hotel/habitacion-doble-sencilla.jpg"
+    }
+  ]
+}

@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, Mail, Clock, Send, CheckCircle2, MessageSquare } from "lucide-react";
+import { Mail, Clock, Send, CheckCircle2, MessageSquare, PhoneCall } from "lucide-react";
+import { toast } from "sonner";
+import { HOTEL_CONFIG } from "@/data/config";
 
 export default function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
@@ -15,14 +17,25 @@ export default function ContactSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: "", phone: "", email: "", message: "" });
-      alert("¡Gracias por contactarnos! Un asesor de Hotel Punto Aparte te responderá pronto.");
-    }, 1500);
+
+    const { name, phone, email, message } = formData;
+    const emailInfo = email ? ` Correo: ${email}.` : "";
+    const textMessage = `Hola recepción, soy ${name}. Mi teléfono es ${phone}.${emailInfo} Mensaje: ${message}`;
+    const encodedMessage = encodeURIComponent(textMessage);
+    const whatsappLink = `https://wa.me/${HOTEL_CONFIG.whatsappRaw}?text=${encodedMessage}`;
+
+    // Open WhatsApp API in a new tab
+    window.open(whatsappLink, "_blank");
+
+    toast.success("¡Redirigiendo a WhatsApp!", {
+      description: `Gracias, ${name}. Se ha abierto tu conversación con la recepción de Hotel Punto Aparte.`,
+    });
+
+    setSubmitted(false);
+    setFormData({ name: "", phone: "", email: "", message: "" });
   };
 
-  const whatsappUrl = "https://wa.me/573132912088?text=Hola%2C%20quisiera%20solicitar%20informaci%C3%B3n%20y%20reservar%20en%20Hotel%20Punto%20Aparte%20Quibd%C3%B3";
+  const whatsappUrl = `https://wa.me/${HOTEL_CONFIG.whatsappRaw}?text=${encodeURIComponent("Hola, quisiera solicitar información y reservar en Hotel Punto Aparte Quibdó")}`;
 
   return (
     <section id="contacto" className="py-24 px-4 sm:px-6 lg:px-8 bg-dark-bg relative z-10">
@@ -45,13 +58,13 @@ export default function ContactSection() {
           {/* Quick Channels Card */}
           <div className="lg:col-span-5 glass-card p-8 rounded-3xl border border-white/10 space-y-6 shadow-xl shadow-black/50">
             <h3 className="font-heading text-xl font-bold text-white mb-2">
-              Canales de Atención 24/7
+              Canales Oficiales 24/7
             </h3>
             <p className="text-xs text-neutral-gray font-light leading-relaxed mb-6">
-              Comunícate con nosotros por cualquiera de nuestras líneas rápidas o escríbenos directamente por WhatsApp.
+              Comunícate con recepción a través de nuestra línea exclusiva de WhatsApp Business o correo oficial.
             </p>
 
-            {/* Direct WhatsApp & Phone */}
+            {/* Direct WhatsApp */}
             <div className="flex items-start gap-4 border-t border-white/10 pt-5">
               <div className="w-11 h-11 rounded-2xl bg-[#25D366]/10 border border-[#25D366]/30 flex items-center justify-center text-[#25D366] shrink-0">
                 <svg className="w-5 h-5 fill-current text-[#25D366]" viewBox="0 0 24 24">
@@ -60,10 +73,10 @@ export default function ContactSection() {
               </div>
               <div className="flex-1">
                 <span className="text-[11px] uppercase tracking-wider text-neutral-gray font-medium block mb-0.5">
-                  WhatsApp Directo
+                  Línea Exclusiva WhatsApp Business
                 </span>
                 <p className="text-base font-bold text-white font-heading">
-                  +57 313 291 2088
+                  {HOTEL_CONFIG.whatsappFormatted}
                 </p>
                 <a
                   href={whatsappUrl}
@@ -76,25 +89,25 @@ export default function ContactSection() {
               </div>
             </div>
 
-            {/* Telephone Landline */}
+            {/* Mobile / Direct Call */}
             <div className="flex items-center gap-3.5 border-t border-white/10 pt-5">
               <div className="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 shrink-0">
-                <Phone className="w-5 h-5" />
+                <PhoneCall className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-[10px] text-neutral-gray block uppercase font-medium">Línea Fija Recepción</span>
-                <span className="text-sm font-semibold text-white">(604) 671 2525</span>
+                <span className="text-[10px] text-neutral-gray block uppercase font-medium">Atención Telefónica Directa</span>
+                <span className="text-sm font-semibold text-white">{HOTEL_CONFIG.whatsappFormatted}</span>
               </div>
             </div>
 
-            {/* Email & Availability */}
+            {/* Corporate Email */}
             <div className="flex items-center gap-3.5 border-t border-white/10 pt-5">
               <div className="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 shrink-0">
                 <Mail className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-[10px] text-neutral-gray block uppercase font-medium">Correo Electrónico</span>
-                <span className="text-xs font-medium text-white">contacto@hotelpuntoaparte.com</span>
+                <span className="text-[10px] text-neutral-gray block uppercase font-medium">Correo Corporativo Oficial</span>
+                <span className="text-xs font-medium text-gold-400 font-mono">{HOTEL_CONFIG.corporateEmail}</span>
               </div>
             </div>
 
@@ -110,7 +123,7 @@ export default function ContactSection() {
           </div>
 
           {/* Quick Message Form */}
-          <div className="lg:col-span-7 glass-card p-8 rounded-3xl border border-white/10 shadow-xl shadow-black/50">
+          <div id="formulario-reserva" className="lg:col-span-7 glass-card p-8 rounded-3xl border border-white/10 shadow-xl shadow-black/50 scroll-mt-28">
             <h4 className="font-heading text-2xl font-bold text-white mb-2">
               Mensaje Directo a Recepción
             </h4>
@@ -140,7 +153,7 @@ export default function ContactSection() {
                   <input
                     type="tel"
                     required
-                    placeholder="Ej: 313 291 2088"
+                    placeholder="Ej: 301 894 0859"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-neutral-gray/60 focus:outline-none focus:border-gold-500 transition-colors"
@@ -188,7 +201,7 @@ export default function ContactSection() {
                 ) : (
                   <>
                     <Send className="w-4 h-4" />
-                    <span>Enviar Mensaje</span>
+                    <span>Enviar Mensaje a WhatsApp</span>
                   </>
                 )}
               </button>
@@ -199,3 +212,4 @@ export default function ContactSection() {
     </section>
   );
 }
+

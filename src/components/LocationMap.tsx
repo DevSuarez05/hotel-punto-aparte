@@ -1,10 +1,8 @@
-"use client";
-
 import { MapPin, Phone, Compass, ExternalLink, Navigation, Landmark, Building2, ShoppingBag } from "lucide-react";
+import { HOTEL_CONFIG } from "@/data/config";
 
 export default function LocationMap() {
-  const googleMapsUrl =
-    "https://www.google.com/maps/search/?api=1&query=Calle+26+No.+5+-+37+Quibdo+Choco+Pasaje+Alameda+Reyes";
+  const googleMapsUrl = HOTEL_CONFIG.googleMapsUrl;
 
   const nearbyLandmarks = [
     {
@@ -36,7 +34,7 @@ export default function LocationMap() {
         <div className="text-center mb-16">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card border border-orange-brand/30 text-xs tracking-widest uppercase text-gold-400 mb-4">
             <Compass className="w-3.5 h-3.5 text-orange-brand" />
-            Localización Privilegiada
+            Localización Estratégica
           </span>
           <h2 className="font-heading text-3xl sm:text-5xl font-bold text-white mb-6">
             Ubicación <span className="text-gold-gradient">Estratégica en Quibdó</span>
@@ -77,13 +75,13 @@ export default function LocationMap() {
                 </div>
                 <div>
                   <span className="text-[11px] uppercase tracking-wider text-gold-400 font-semibold block mb-1">
-                    Teléfonos de Atención
+                    Línea Exclusiva WhatsApp Business
                   </span>
                   <p className="text-base font-bold text-white font-heading">
-                    +57 313 291 2088
+                    {HOTEL_CONFIG.whatsappFormatted}
                   </p>
                   <p className="text-xs text-neutral-gray mt-0.5">
-                    Teléfono Fijo: (604) 671 2525
+                    Atención permanente 24/7
                   </p>
                 </div>
               </div>
@@ -167,3 +165,4 @@ export default function LocationMap() {
     </section>
   );
 }
+

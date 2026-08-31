@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
+import { Toaster } from "sonner";
 import Navbar from "@/components/Navbar";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CartDrawer from "@/components/CartDrawer";
+import CheckoutModal from "@/components/CheckoutModal";
+import { CartProvider } from "@/context/CartContext";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -109,7 +113,7 @@ const jsonLd = {
     longitude: "-76.6611",
   },
   url: "https://hotelpuntoaparte.com",
-  telephone: "+573132912088",
+  telephone: "+573018940859",
   priceRange: "$$",
   starRating: {
     "@type": "Rating",
@@ -134,13 +138,19 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-dark-bg text-neutral-light font-sans selection:bg-gold-500/30 selection:text-neutral-light relative">
-        <Navbar />
-        {children}
-        <WhatsAppButton />
+        <CartProvider>
+          <Navbar />
+          {children}
+          <WhatsAppButton />
+          <CartDrawer />
+          <CheckoutModal />
+          <Toaster position="bottom-right" theme="dark" richColors />
+        </CartProvider>
       </body>
     </html>
   );
 }
+
 
 
 

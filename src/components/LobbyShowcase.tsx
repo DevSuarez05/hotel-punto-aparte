@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Sparkles, ShieldCheck, Clock, HeartHandshake, Info, Maximize2, X, ChevronRight } from "lucide-react";
+import { Sparkles, ShieldCheck, Clock, HeartHandshake, Info, Maximize2, X, ChevronRight, LucideIcon } from "lucide-react";
+import { HOTEL_CONFIG } from "@/data/config";
 
 interface Hotspot {
   id: number;
@@ -11,7 +12,7 @@ interface Hotspot {
   title: string;
   subtitle: string;
   description: string;
-  icon: any;
+  icon: LucideIcon;
 }
 
 export default function LobbyShowcase() {
@@ -88,10 +89,11 @@ export default function LobbyShowcase() {
             {/* Real User Lobby Photo */}
             <div className="relative w-full h-[380px] sm:h-[500px] lg:h-[540px]">
               <Image
-                src="/images/hotel_lobby_real_user.jpg"
+                src="/assets/images/hotel/recepcion.jpg"
                 alt="Recepción real de Hotel Punto Aparte Quibdó con detalles interactivos"
                 fill
                 priority
+                quality={85}
                 sizes="(max-width: 1024px) 100vw, 66vw"
                 className="object-cover object-center group-hover:scale-[1.02] transition-transform duration-700"
               />
@@ -185,12 +187,12 @@ export default function LobbyShowcase() {
               {/* Action Link to WhatsApp Reservation */}
               <div className="pt-4 border-t border-white/10 mt-4">
                 <a
-                  href="https://wa.me/573132912088?text=Hola%2C%20quisiera%20consultar%20disponibilidad%20en%20el%20Hotel%20Punto%20Aparte"
+                  href={`https://wa.me/${HOTEL_CONFIG.whatsappRaw}?text=${encodeURIComponent("¡Hola Hotel Punto Aparte! Quisiera consultar disponibilidad y resolver unas dudas sobre mi llegada a Quibdó.")}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full inline-flex items-center justify-between text-xs font-bold text-gold-400 hover:text-white transition-colors"
                 >
-                  <span>¿Dudas sobre tu llegada? Escríbenos</span>
+                  <span>¿Dudas sobre tu llegada? Escríbenos por WhatsApp</span>
                   <ChevronRight className="w-4 h-4 text-orange-brand" />
                 </a>
               </div>
@@ -242,10 +244,12 @@ export default function LobbyShowcase() {
 
             <div className="relative w-full h-[65vh] sm:h-[75vh] rounded-2xl overflow-hidden">
               <Image
-                src="/images/hotel_lobby_real_user.jpg"
+                src="/assets/images/hotel/recepcion-amplia.jpg"
                 alt="Recepción Hotel Punto Aparte Quibdó"
                 fill
                 priority
+                quality={90}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1024px"
                 className="object-contain object-center"
               />
             </div>

@@ -17,46 +17,60 @@ export default function Gallery() {
 
   const galleryItems: GalleryItem[] = [
     {
-      id: "recepcion",
-      src: "/images/hotel_recepcion.png",
-      alt: "Recepción real de Hotel Punto Aparte Quibdó",
-      caption: "Recepción cálida y moderna",
+      id: "recepcion-mostrador",
+      src: "/assets/images/hotel/recepcion.jpg",
+      alt: "Recepción de Hotel Punto Aparte Quibdó con luz azul y plantas decorativas",
+      caption: "Mostrador de Recepción con Iluminación LED & Pérgola Verde",
       category: "Recepción & Lobby",
     },
     {
-      id: "fachada",
-      src: "/images/hotel_fachada.png",
-      alt: "Fachada exterior del Hotel Punto Aparte en Quibdó",
-      caption: "Fachada exterior y entrada principal",
-      category: "Arquitectura Exterior",
+      id: "recepcion-amplia",
+      src: "/assets/images/hotel/recepcion-amplia.jpg",
+      alt: "Vista angular completa del lobby y recepción de Hotel Punto Aparte",
+      caption: "Hall Principal & Check-in 24 Horas",
+      category: "Recepción & Lobby",
     },
     {
-      id: "ejecutiva",
-      src: "/rooms/executive_single.jpg",
-      alt: "Habitación Sencilla Ejecutivo",
-      caption: "Habitaciones Ejecutivas insonorizadas",
+      id: "habitacion-matrimonial",
+      src: "/assets/images/hotel/habitacion-matrimonial.jpg",
+      alt: "Habitación Matrimonial con cama doble, acabados de mármol y cortinas rojas",
+      caption: "Acomodación Matrimonial Prémium",
       category: "Habitaciones",
     },
     {
-      id: "doble-confort",
-      src: "/rooms/double_comfort.jpg",
-      alt: "Habitación Doble Confort",
-      caption: "Suites Doble Confort",
+      id: "habitacion-doble-sencilla",
+      src: "/assets/images/hotel/habitacion-doble-sencilla.jpg",
+      alt: "Habitación con dos camas y techo artesanal en madera de alta calidad",
+      caption: "Habitación Doble Familiar con Techo en Madera",
       category: "Habitaciones",
     },
     {
-      id: "presidencial",
-      src: "/rooms/presidential_suite.jpg",
-      alt: "Suite Presidencial VIP",
-      caption: "Suite Presidencial VIP",
-      category: "Suites VIP",
+      id: "lobby-zona-estar",
+      src: "/assets/images/hotel/lobby-zona-estar.jpg",
+      alt: "Lobby y sala de estar con sofás azules, mesa auxiliar y Smart TV",
+      caption: "Lobby & Sala de Estar para Huéspedes",
+      category: "Zonas Comunes",
     },
     {
-      id: "lobby",
-      src: "/hero_hotel_facade.jpg",
-      alt: "Lobby principal y sala de estar",
-      caption: "Lobby principal y ambiente exclusivo",
-      category: "Instalaciones",
+      id: "pasillo-principal-madera",
+      src: "/assets/images/hotel/pasillo-principal-madera.jpg",
+      alt: "Pasillo central con vigas de madera noble e iluminación focalizada",
+      caption: "Pasillo Central con Vigas de Madera & Galería",
+      category: "Arquitectura & Pasillos",
+    },
+    {
+      id: "pasillos-habitaciones",
+      src: "/assets/images/hotel/pasillos-habitaciones.jpg",
+      alt: "Pasillo de acceso a las 23 habitaciones con pisos brillantes y ventilación",
+      caption: "Pasillo de Acceso a Habitaciones",
+      category: "Arquitectura & Pasillos",
+    },
+    {
+      id: "pasillos-habitaciones-2",
+      src: "/assets/images/hotel/pasillos-habitaciones-2.jpg",
+      alt: "Corredor de habitaciones de Hotel Punto Aparte Quibdó",
+      caption: "Corredor y Circulación Interna",
+      category: "Arquitectura & Pasillos",
     },
   ];
 
@@ -67,31 +81,33 @@ export default function Gallery() {
         <div className="text-center mb-16">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card border border-orange-brand/30 text-xs tracking-widest uppercase text-gold-400 mb-4">
             <Sparkles className="w-3.5 h-3.5 text-orange-brand" />
-            Galería Fotográfica
+            Galería Fotográfica Oficial
           </span>
           <h2 className="font-heading text-3xl sm:text-5xl font-bold text-white mb-6">
-            Conoce <span className="text-gold-gradient">Nuestros Espacios</span>
+            Conoce <span className="text-gold-gradient">Nuestros Espacios Reales</span>
           </h2>
           <p className="text-base sm:text-lg text-neutral-gray max-w-2xl mx-auto font-light leading-relaxed">
-            Una mirada a la arquitectura refinada, iluminación acogedora y atmósfera de confort que te esperan en Hotel Punto Aparte Quibdó.
+            Explora las fotografías oficiales de nuestras habitaciones, lobby, recepción y pasillos con acabados en madera en el centro de Quibdó.
           </p>
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {galleryItems.map((item) => (
             <div
               key={item.id}
               onClick={() => setSelectedImage(item)}
-              className="glass-card glass-card-hover rounded-3xl overflow-hidden border border-white/10 group cursor-pointer relative flex flex-col justify-end min-h-[300px] sm:min-h-[340px] shadow-xl shadow-black/50"
+              className="glass-card glass-card-hover rounded-3xl overflow-hidden border border-white/10 group cursor-pointer relative flex flex-col justify-end min-h-[280px] sm:min-h-[320px] shadow-xl shadow-black/50"
             >
-              {/* Image */}
+              {/* Image with lazy loading and object-cover */}
               <Image
                 src={item.src}
                 alt={item.alt}
                 fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover object-center group-hover:scale-110 transition-transform duration-700"
+                loading="lazy"
+                quality={85}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                className="object-cover object-center transform-gpu group-hover:scale-110 transition-transform duration-700"
               />
 
               {/* Gradient Overlay */}
@@ -103,11 +119,11 @@ export default function Gallery() {
               </div>
 
               {/* Caption Card Footer */}
-              <div className="relative z-10 p-6 space-y-2">
-                <span className="inline-block px-3 py-1 rounded-full bg-orange-brand/20 border border-orange-brand/40 text-orange-brand text-[10px] uppercase font-bold tracking-wider mb-1">
+              <div className="relative z-10 p-5 space-y-1.5">
+                <span className="inline-block px-2.5 py-0.5 rounded-full bg-orange-brand/20 border border-orange-brand/40 text-orange-brand text-[10px] uppercase font-bold tracking-wider mb-1">
                   {item.category}
                 </span>
-                <h3 className="font-heading text-lg font-bold text-white group-hover:text-gold-300 transition-colors">
+                <h3 className="font-heading text-sm font-bold text-white group-hover:text-gold-300 transition-colors leading-snug">
                   {item.caption}
                 </h3>
               </div>
@@ -124,7 +140,7 @@ export default function Gallery() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center glass-card border border-gold-500/30 rounded-3xl overflow-hidden p-2 sm:p-4 shadow-2xl"
+            className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center glass-card border border-gold-500/30 rounded-3xl overflow-hidden p-2 sm:p-4 shadow-2xl"
           >
             {/* Close Button */}
             <button
@@ -142,6 +158,8 @@ export default function Gallery() {
                 alt={selectedImage.alt}
                 fill
                 priority
+                quality={90}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1024px"
                 className="object-contain object-center"
               />
             </div>

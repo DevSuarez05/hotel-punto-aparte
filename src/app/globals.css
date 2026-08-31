@@ -35,12 +35,42 @@
   --foreground: #ffffff;
 }
 
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
 /* Base Body Styles */
 body {
   background-color: #0d0d0d;
   color: #ffffff;
   font-family: var(--font-sans);
   overflow-x: hidden;
+}
+
+/* Print Styles for Invoice */
+@media print {
+  body {
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+  .no-print,
+  header,
+  footer,
+  nav,
+  .fixed {
+    display: none !important;
+  }
+  #printable-invoice {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #ccc !important;
+    padding: 20px !important;
+  }
+  #printable-invoice * {
+    color: #000 !important;
+    background: transparent !important;
+  }
 }
 
 ::selection {
@@ -113,14 +143,22 @@ body {
 }
 
 .glass-card-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
 }
 
 .glass-card-hover:hover {
   background: rgba(30, 30, 30, 0.9);
   border-color: rgba(230, 81, 0, 0.4);
-  transform: translateY(-2px);
+  transform: translateY(-2px) translateZ(0);
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(230, 81, 0, 0.15);
+}
+
+/* GPU Hardware Acceleration Utilities */
+.transform-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 
