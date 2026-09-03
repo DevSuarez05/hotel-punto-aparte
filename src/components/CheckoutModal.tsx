@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
   X,
   CheckCircle2,
@@ -10,7 +10,6 @@ import {
   Phone,
   Building2,
   FileText,
-  Printer,
   ArrowRight,
   ArrowLeft,
   Check,
@@ -18,8 +17,6 @@ import {
   Copy,
   ShieldCheck,
   Clock,
-  Sparkles,
-  MapPin,
   CheckCheck,
   Download,
   Lock,
@@ -35,6 +32,11 @@ import {
 } from "@/data/payments";
 import OfficialInvoiceDocument from "./OfficialInvoiceDocument";
 import { toast } from "sonner";
+import {
+  buildBookingWhatsAppUrl,
+  saveStoredReservation,
+  BookingNotificationData,
+} from "@/lib/bookingClient";
 
 interface InvoiceItem {
   id: string;
@@ -182,51 +184,98 @@ export default function CheckoutModal() {
     setStep(2);
   };
 
-  // CONFIRMACIÓN Y ENVÍO DIRECTO A WHATSAPP CON PERSISTENCIA EN DB
-  const handleConfirmReservation = async () => {
+  // CONFIRMACIÓN Y ENVÍO DIRECTO A WHATSAPP CON PERSISTENCIA LOCAL (EXPORTACIÓN ESTÁTICA)
+  const handleConfirmReservation = () => {
     setIsSubmitting(true);
 
-    const docFormatted = `${documentType} ${documentNumber}`;
+    const docFormatted = `${documentType} ${documentNumber}`.trim();
     const finalAmount = activeTotalAmount;
 
     try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true",
-        },
-        body: JSON.stringify({
-          customer: {
-            fullName,
-            documentType,
-            documentNumber,
-            documentId: docFormatted,
-            email,
-            phone,
-            specialRequests,
-            paymentMethod: "bancolombia_savings",
-          },
-          reservation: {
-            checkIn,
-            checkOut,
-            nights: validNights,
-            totalAmount: finalAmount,
-            items: activeItems,
-          },
-        }),
+      const year = new Date().getFullYear();
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      const invoiceId = `FACT-${year}-${randomNum}`;
+      const createdAt = new Date().toLocaleDateString("es-CO", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       });
 
-      const data = await res.json();
+      const paymentMethodLabel = "Cuenta de Ahorros Bancolombia";
 
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || "No se pudo registrar la reserva");
-      }
+      const bookingData: BookingNotificationData = {
+        invoiceId,
+        fullName,
+        documentType,
+        documentNumber,
+        documentId: docFormatted,
+        email,
+        phone,
+        specialRequests,
+        checkIn,
+        checkOut,
+        nights: validNights,
+        items: activeItems.map((item) => ({
+          name: item.name,
+          quantity: item.quantity,
+          pricePerNight: item.pricePerNight,
+          totalPrice: item.totalPrice,
+        })),
+        totalAmount: finalAmount,
+        paymentMethodLabel,
+        createdAt,
+      };
 
-      setInvoice({
-        ...data.invoice,
+      const whatsappLink = buildBookingWhatsAppUrl(bookingData);
+
+      // Persistir en almacenamiento local para el panel de administración
+      saveStoredReservation({
+        id: `RES-${Date.now()}-${randomNum}`,
+        reference: invoiceId,
+        customerName: fullName,
+        documentType,
+        documentNumber,
+        phone,
+        email,
+        paymentMethod: paymentMethodLabel,
+        specialRequests,
+        totalAmount: finalAmount,
+        items: activeItems.map((it) => ({
+          roomId: it.id,
+          roomName: it.name,
+          quantity: it.quantity,
+          pricePerNight: it.pricePerNight,
+        })),
+        checkIn,
+        checkOut,
+        nights: validNights,
+        status: "PENDING_WHATSAPP",
+        createdAt: new Date().toISOString(),
+      });
+
+      const newInvoice: InvoiceData = {
+        invoiceId,
+        createdAt,
+        fullName,
+        documentType,
+        documentNumber,
+        documentId: docFormatted,
+        email,
+        phone,
+        specialRequests,
+        paymentMethodLabel,
         paymentStatus: "PENDING_PAYMENT",
-      });
+        checkIn,
+        checkOut,
+        nights: validNights,
+        items: activeItems,
+        totalAmount: finalAmount,
+        whatsappLink,
+      };
+
+      setInvoice(newInvoice);
       setStep(3);
 
       toast.success("¡Reserva registrada con éxito!", {
@@ -234,11 +283,9 @@ export default function CheckoutModal() {
       });
 
       // Abrir WhatsApp oficial en nueva pestaña
-      if (data.whatsappLink) {
-        setTimeout(() => {
-          window.open(data.whatsappLink, "_blank", "noopener,noreferrer");
-        }, 500);
-      }
+      setTimeout(() => {
+        window.open(whatsappLink, "_blank", "noopener,noreferrer");
+      }, 500);
     } catch (err: unknown) {
       console.error("Error al procesar reserva:", err);
       const msg = err instanceof Error ? err.message : "Error al procesar la solicitud";
@@ -249,49 +296,6 @@ export default function CheckoutModal() {
       setIsSubmitting(false);
     }
   };
-
-  // Sincronización en tiempo real: Si recepción aprueba el pago en el panel de control,
-  // la factura en pantalla se actualiza automáticamente a CONFIRMADA.
-  useEffect(() => {
-    if (step !== 3 || !invoice?.invoiceId) return;
-
-    let eventSource: EventSource | null = null;
-    try {
-      eventSource = new EventSource("/api/reservations/stream");
-      eventSource.onmessage = (event) => {
-        try {
-          const payload = JSON.parse(event.data);
-          if (
-            (payload.type === "STATUS_CHANGED" || payload.type === "RESERVATION_UPDATED") &&
-            payload.data?.reference === invoice.invoiceId
-          ) {
-            const confirmed = payload.data?.status === "CONFIRMED";
-            setInvoice((prev) =>
-              prev
-                ? {
-                    ...prev,
-                    paymentStatus: confirmed ? "CONFIRMED" : "PENDING_PAYMENT",
-                  }
-                : null
-            );
-            if (confirmed) {
-              toast.success("¡Pago Aprobado y Confirmado!", {
-                description: "Recepción ha verificado tu comprobante y confirmado tu reserva.",
-              });
-            }
-          }
-        } catch {
-          // Ignorar parsing errors
-        }
-      };
-    } catch {
-      // Ignorar fallback
-    }
-
-    return () => {
-      if (eventSource) eventSource.close();
-    };
-  }, [step, invoice?.invoiceId]);
 
   const currentDisplayTotal =
     step === 3 && invoice ? invoice.totalAmount : activeTotalAmount;

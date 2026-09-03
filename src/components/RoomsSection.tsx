@@ -1,13 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { Eye, Users, Maximize, Wifi, Tv, Check, Snowflake, Wind, View, ShoppingBag, Filter, CalendarCheck2, AlertTriangle } from "lucide-react";
 import { roomsData, Room, TOTAL_HOTEL_ROOMS, RoomCategoryId } from "@/data/rooms";
 import { useCart } from "@/context/CartContext";
 import { HOTEL_CONFIG } from "@/data/config";
-import { RoomAvailabilityResult } from "@/lib/inventory";
+
+export interface RoomAvailabilityResult {
+  roomId: RoomCategoryId;
+  roomName: string;
+  totalStock: number;
+  occupiedUnits: number;
+  availableUnits: number;
+  isSoldOut: boolean;
+  maxCapacityNumber: number;
+}
 
 const RoomModal = dynamic(() => import("./RoomModal"), { ssr: false });
 
@@ -16,49 +25,9 @@ export default function RoomsSection() {
   const [is360Mode, setIs360Mode] = useState(false);
   const [climateFilter, setClimateFilter] = useState<"all" | "ac" | "fan">("all");
   const [bedFilter, setBedFilter] = useState<"all" | "doble" | "sencilla">("all");
-  const [availabilityMap, setAvailabilityMap] = useState<Record<string, RoomAvailabilityResult>>({});
-  const [isLoadingAvailability, setIsLoadingAvailability] = useState(false);
+  const [availabilityMap] = useState<Record<string, RoomAvailabilityResult>>({});
 
   const { checkIn, checkOut, guests, addToCart } = useCart();
-
-  const fetchAvailability = (silent = false) => {
-    if (!checkIn || !checkOut) return;
-    if (!silent) setIsLoadingAvailability(true);
-
-    fetch(`/api/availability?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}`, {
-      headers: { "ngrok-skip-browser-warning": "true" },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && data.roomsAvailability) {
-          setAvailabilityMap(data.roomsAvailability);
-        }
-      })
-      .catch((err) => console.error("Error al obtener disponibilidad:", err))
-      .finally(() => {
-        if (!silent) setIsLoadingAvailability(false);
-      });
-  };
-
-  // Consultar disponibilidad en tiempo real para las fechas seleccionadas
-  useEffect(() => {
-    fetchAvailability(false);
-
-    // Escuchar cambios en vivo del backend (reservas creadas o canceladas)
-    let eventSource: EventSource | null = null;
-    try {
-      eventSource = new EventSource("/api/reservations/stream");
-      eventSource.onmessage = () => {
-        fetchAvailability(true);
-      };
-    } catch {
-      // Fallback
-    }
-
-    return () => {
-      if (eventSource) eventSource.close();
-    };
-  }, [checkIn, checkOut]);
 
   // Filtrar habitaciones por climatización, tipo de cama y capacidad
   const filteredRooms = roomsData.filter((room) => {

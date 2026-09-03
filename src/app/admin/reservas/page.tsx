@@ -40,6 +40,12 @@ import { HOTEL_PAYMENT_ACCOUNTS } from "@/data/payments";
 import { formatCOP, roomsData, TOTAL_HOTEL_ROOMS } from "@/data/rooms";
 import OfficialInvoiceDocument from "@/components/OfficialInvoiceDocument";
 import { toast } from "sonner";
+import seedReservations from "@/data/reservations.json";
+import {
+  getStoredReservations,
+  updateStoredReservationStatus,
+  StoredReservation,
+} from "@/lib/bookingClient";
 
 interface ReservationItem {
   roomId: string;
@@ -104,6 +110,24 @@ function playChimeNotification() {
   } catch (e) {
     // Audio no disponible
   }
+}
+
+function computeStats(reservationsList: Reservation[]): Stats {
+  const confirmed = reservationsList.filter((r) => r.status === "CONFIRMED");
+  const pending = reservationsList.filter((r) => r.status === "PENDING_WHATSAPP");
+  const cancelled = reservationsList.filter((r) => r.status === "CANCELLED");
+  const expired = reservationsList.filter((r) => r.status === "EXPIRED");
+  const totalRevenue = confirmed.reduce((acc, r) => acc + (r.totalAmount || 0), 0);
+
+  return {
+    totalReservations: reservationsList.length,
+    confirmedCount: confirmed.length,
+    pendingCount: pending.length,
+    cancelledCount: cancelled.length,
+    expiredCount: expired.length,
+    totalRevenue,
+    hotelCapacity: TOTAL_HOTEL_ROOMS,
+  };
 }
 
 export default function AdminReservasPage() {
@@ -179,21 +203,27 @@ export default function AdminReservasPage() {
     setCurrentTab("LIST");
   };
 
-  const fetchReservations = useCallback(async (silent = false) => {
+  const fetchReservations = useCallback((silent = false) => {
     if (!silent) setIsLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (searchQuery) params.set("query", searchQuery);
-      if (statusFilter !== "ALL") params.set("status", statusFilter);
-
-      const res = await fetch(`/api/reservations?${params.toString()}`);
-      const data = await res.json();
-
-      if (data.success) {
-        setReservations(data.reservations || []);
-        setStats(data.stats || null);
-        setLastSyncTime(new Date().toLocaleTimeString("es-CO"));
+      const stored = getStoredReservations(seedReservations as unknown as StoredReservation[]);
+      let filtered = [...stored] as unknown as Reservation[];
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        filtered = filtered.filter(
+          (r) =>
+            r.customerName.toLowerCase().includes(q) ||
+            r.reference.toLowerCase().includes(q) ||
+            (r.phone && r.phone.includes(q))
+        );
       }
+      if (statusFilter !== "ALL") {
+        filtered = filtered.filter((r) => r.status === statusFilter);
+      }
+      setReservations(filtered);
+      setStats(computeStats(stored as unknown as Reservation[]));
+      setLastSyncTime(new Date().toLocaleTimeString("es-CO"));
+      setIsLiveConnected(true);
     } catch (err) {
       console.error("Error cargando reservas:", err);
       if (!silent) toast.error("Error al cargar reservas");
@@ -209,138 +239,88 @@ export default function AdminReservasPage() {
     }
   }, [isAuthenticated, fetchReservations]);
 
-  // Sincronización en Tiempo Real mediante Server-Sent Events (SSE)
+  // Sincronización en Tiempo Real mediante evento 'storage' del navegador
   useEffect(() => {
     if (!isAuthenticated) return;
 
-    let eventSource: EventSource | null = null;
-    let fallbackInterval: NodeJS.Timeout | null = null;
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "hotel_punto_aparte_reservations") {
+        fetchReservations(true);
+        playChimeNotification();
+        toast.info("🔔 ¡Base de datos de reservas sincronizada!", {
+          description: "Se detectaron cambios en el almacenamiento local.",
+        });
+      }
+    };
 
-    try {
-      eventSource = new EventSource("/api/reservations/stream");
-
-      eventSource.onopen = () => {
-        setIsLiveConnected(true);
-        setLastSyncTime(new Date().toLocaleTimeString("es-CO"));
-      };
-
-      eventSource.onmessage = (event) => {
-        try {
-          const payload = JSON.parse(event.data);
-
-          if (payload.type === "INITIAL_SYNC") {
-            if (payload.stats) setStats(payload.stats);
-            fetchReservations(true);
-          } else if (payload.type === "RESERVATION_CREATED") {
-            playChimeNotification();
-            toast.info("🔔 ¡Nueva Reserva Recibida!", {
-              description: `Factura ${payload.data?.reference} · ${payload.data?.customerName} (${formatCOP(payload.data?.totalAmount || 0)})`,
-              duration: 6000,
-            });
-            fetchReservations(true);
-          } else if (payload.type === "STATUS_CHANGED" || payload.type === "INVENTORY_CHANGED") {
-            fetchReservations(true);
-          }
-        } catch (err) {
-          console.error("[SSE Client] Error procesando mensaje:", err);
-        }
-      };
-
-      eventSource.onerror = () => {
-        setIsLiveConnected(false);
-      };
-    } catch (err) {
-      console.warn("[SSE Client] No soportado, activando polling de respaldo:", err);
-      setIsLiveConnected(false);
-    }
-
-    fallbackInterval = setInterval(() => {
-      fetchReservations(true);
-    }, 8000);
-
+    window.addEventListener("storage", handleStorage);
     return () => {
-      if (eventSource) eventSource.close();
-      if (fallbackInterval) clearInterval(fallbackInterval);
+      window.removeEventListener("storage", handleStorage);
     };
   }, [isAuthenticated, fetchReservations]);
 
-  const handleStatusChange = async (reference: string, newStatus: "CONFIRMED" | "CANCELLED" | "PENDING_WHATSAPP") => {
+  const handleStatusChange = (reference: string, newStatus: "CONFIRMED" | "CANCELLED" | "PENDING_WHATSAPP") => {
     try {
-      const res = await fetch("/api/reservations", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reference, status: newStatus }),
-      });
+      const updated = updateStoredReservationStatus(reference, newStatus);
+      toast.success(
+        newStatus === "CONFIRMED"
+          ? `¡Pago Aprobado y Factura Despachada para ${reference}!`
+          : `Reserva ${reference} actualizada a ${newStatus}`
+      );
 
-      const data = await res.json();
-      if (data.success) {
-        toast.success(
-          newStatus === "CONFIRMED"
-            ? `¡Pago Aprobado y Factura Despachada para ${reference}!`
-            : `Reserva ${reference} actualizada a ${newStatus}`
-        );
+      if (newStatus === "CONFIRMED") {
+        const resObj = (updated as unknown as Reservation[]).find((r) => r.reference === reference);
+        
+        if (resObj?.phone) {
+          const cleanPhone = resObj.phone.replace(/\D/g, "");
+          const formattedPhone = cleanPhone.startsWith("57") ? cleanPhone : `57${cleanPhone}`;
 
-        if (newStatus === "CONFIRMED") {
-          const resObj = reservations.find((r) => r.reference === reference);
-          
-          if (data.whatsappSent) {
-            toast.success("¡Factura Despachada en Segundo Plano!", {
-              description: `Enviada automáticamente al WhatsApp de ${resObj?.customerName || "el huésped"}.`,
-            });
-          } else if (resObj?.phone) {
-            // Modo asistido: Abre el enlace wa.me porque aún no hay token de API de WhatsApp configurado en .env.local
-            const cleanPhone = resObj.phone.replace(/\D/g, "");
-            const formattedPhone = cleanPhone.startsWith("57") ? cleanPhone : `57${cleanPhone}`;
+          const itemsFormatted = (resObj.items || [])
+            .map((i) => `• ${i.quantity}x ${i.roomName || i.roomId}`)
+            .join("\n");
 
-            const itemsFormatted = (resObj.items || [])
-              .map((i) => `• ${i.quantity}x ${i.roomName || i.roomId}`)
-              .join("\n");
+          const msg =
+            `*FACTURA OFICIAL & CONFIRMACIÓN DE RESERVA*\n` +
+            `*${HOTEL_CONFIG.name.toUpperCase()} — Quibdó, Chocó*\n\n` +
+            `*Factura N°:* ${resObj.reference}\n` +
+            `*Estado:* PAGADA Y CONFIRMADA (Comprobante Verificado)\n` +
+            `*Fecha de Validación:* ${new Date().toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" })}\n\n` +
+            `----------------------------------------\n` +
+            `*DATOS DEL HUÉSPED*\n` +
+            `• *Nombre:* ${resObj.customerName}\n` +
+            (resObj.documentNumber ? `• *Documento:* ${resObj.documentType || "CC"} ${resObj.documentNumber}\n` : "") +
+            (resObj.email ? `• *Email:* ${resObj.email}\n` : "") +
+            `\n----------------------------------------\n` +
+            `*DETALLES DE LA ESTANCIA CONFIRMADA*\n` +
+            `• *Check-in:* ${resObj.checkIn} (Desde las 3:00 PM)\n` +
+            `• *Check-out:* ${resObj.checkOut} (Hasta la 1:00 PM)\n` +
+            `• *Duración:* ${resObj.nights || 1} ${(resObj.nights || 1) === 1 ? "noche" : "noches"}\n\n` +
+            `*Acomodación:* \n${itemsFormatted}\n\n` +
+            `----------------------------------------\n` +
+            `*PAGO ACREDITADO:* *${formatCOP(resObj.totalAmount || 0)}*\n` +
+            `• *Medio:* Cuenta de Ahorros Bancolombia\n` +
+            `• *Titular:* ${HOTEL_PAYMENT_ACCOUNTS.beneficiaryName}\n` +
+            `----------------------------------------\n\n` +
+            `*¡Su reserva está 100% GARANTIZADA! Presente este comprobante digital o su documento de identidad en la recepción del hotel al momento del check-in.*\n\n` +
+            `*Hotel Punto Aparte · Pasaje Peatonal Alameda Reyes · WhatsApp Oficial: +57 301 894 0859*`;
 
-            const msg =
-              `*FACTURA OFICIAL & CONFIRMACIÓN DE RESERVA*\n` +
-              `*${HOTEL_CONFIG.name.toUpperCase()} — Quibdó, Chocó*\n\n` +
-              `*Factura N°:* ${resObj.reference}\n` +
-              `*Estado:* PAGADA Y CONFIRMADA (Comprobante Verificado)\n` +
-              `*Fecha de Validación:* ${new Date().toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" })}\n\n` +
-              `----------------------------------------\n` +
-              `*DATOS DEL HUÉSPED*\n` +
-              `• *Nombre:* ${resObj.customerName}\n` +
-              (resObj.documentNumber ? `• *Documento:* ${resObj.documentType || "CC"} ${resObj.documentNumber}\n` : "") +
-              (resObj.email ? `• *Email:* ${resObj.email}\n` : "") +
-              `\n----------------------------------------\n` +
-              `*DETALLES DE LA ESTANCIA CONFIRMADA*\n` +
-              `• *Check-in:* ${resObj.checkIn} (Desde las 3:00 PM)\n` +
-              `• *Check-out:* ${resObj.checkOut} (Hasta la 1:00 PM)\n` +
-              `• *Duración:* ${resObj.nights || 1} ${(resObj.nights || 1) === 1 ? "noche" : "noches"}\n\n` +
-              `*Acomodación:* \n${itemsFormatted}\n\n` +
-              `----------------------------------------\n` +
-              `*PAGO ACREDITADO:* *${formatCOP(resObj.totalAmount || 0)}*\n` +
-              `• *Medio:* Cuenta de Ahorros Bancolombia (298-530084-33)\n` +
-              `• *Titular:* José Raúl Gómez Botero\n` +
-              `----------------------------------------\n\n` +
-              `*¡Su reserva está 100% GARANTIZADA! Presente este comprobante digital o su documento de identidad en la recepción del hotel al momento del check-in.*\n\n` +
-              `*Hotel Punto Aparte · Pasaje Peatonal Alameda Reyes · WhatsApp Oficial: +57 301 894 0859*`;
+          const waLink = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(msg)}`;
+          window.open(waLink, "_blank", "noopener,noreferrer");
 
-            const waLink = data.whatsappLink || `https://wa.me/${formattedPhone}?text=${encodeURIComponent(msg)}`;
-            window.open(waLink, "_blank", "noopener,noreferrer");
-
-            toast.info("Abriendo WhatsApp Web con Factura", {
-              description: "Para enviar automáticamente en segundo plano, agrega META_WHATSAPP_TOKEN en .env.local.",
-            });
-          }
+          toast.info("Abriendo WhatsApp Web con Factura", {
+            description: "Enviando confirmación y comprobante verificado directamente al cliente.",
+          });
         }
-
-        if (selectedInvoice && selectedInvoice.reference === reference) {
-          setSelectedInvoice((prev) => (prev ? { ...prev, status: newStatus } : null));
-        }
-
-        fetchReservations(true);
-      } else {
-        toast.error("No se pudo actualizar el estado");
       }
+
+      if (selectedInvoice && selectedInvoice.reference === reference) {
+        setSelectedInvoice((prev) => (prev ? { ...prev, status: newStatus } : null));
+      }
+
+      fetchReservations(true);
     } catch (err) {
       console.error("Error al actualizar estado:", err);
-      toast.error("Error de servidor");
+      toast.error("Error al actualizar la reserva");
     }
   };
 
