@@ -21,27 +21,42 @@ export default function RoomsSection() {
 
   const { checkIn, checkOut, guests, addToCart } = useCart();
 
-  // Consultar disponibilidad en tiempo real para las fechas seleccionadas
-  useEffect(() => {
+  const fetchAvailability = (silent = false) => {
     if (!checkIn || !checkOut) return;
+    if (!silent) setIsLoadingAvailability(true);
 
-    let isMounted = true;
-    setIsLoadingAvailability(true);
-
-    fetch(`/api/availability?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}`)
+    fetch(`/api/availability?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}`, {
+      headers: { "ngrok-skip-browser-warning": "true" },
+    })
       .then((res) => res.json())
       .then((data) => {
-        if (isMounted && data.success && data.roomsAvailability) {
+        if (data.success && data.roomsAvailability) {
           setAvailabilityMap(data.roomsAvailability);
         }
       })
       .catch((err) => console.error("Error al obtener disponibilidad:", err))
       .finally(() => {
-        if (isMounted) setIsLoadingAvailability(false);
+        if (!silent) setIsLoadingAvailability(false);
       });
+  };
+
+  // Consultar disponibilidad en tiempo real para las fechas seleccionadas
+  useEffect(() => {
+    fetchAvailability(false);
+
+    // Escuchar cambios en vivo del backend (reservas creadas o canceladas)
+    let eventSource: EventSource | null = null;
+    try {
+      eventSource = new EventSource("/api/reservations/stream");
+      eventSource.onmessage = () => {
+        fetchAvailability(true);
+      };
+    } catch {
+      // Fallback
+    }
 
     return () => {
-      isMounted = false;
+      if (eventSource) eventSource.close();
     };
   }, [checkIn, checkOut]);
 

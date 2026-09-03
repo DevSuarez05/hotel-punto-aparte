@@ -17,18 +17,11 @@ export default function Gallery() {
 
   const galleryItems: GalleryItem[] = [
     {
-      id: "recepcion-mostrador",
-      src: "/assets/images/hotel/recepcion.jpg",
-      alt: "Recepción de Hotel Punto Aparte Quibdó con luz azul y plantas decorativas",
-      caption: "Mostrador de Recepción con Iluminación LED & Pérgola Verde",
-      category: "Recepción & Lobby",
-    },
-    {
-      id: "recepcion-amplia",
-      src: "/assets/images/hotel/recepcion-amplia.jpg",
-      alt: "Vista angular completa del lobby y recepción de Hotel Punto Aparte",
-      caption: "Hall Principal & Check-in 24 Horas",
-      category: "Recepción & Lobby",
+      id: "recepcion-oficial",
+      src: "/assets/images/hotel/recepcion-oficial-hotel.jpg",
+      alt: "Recepción de Hotel Punto Aparte Quibdó con pérgola de madera, luces cálidas y atención 24 horas",
+      caption: "Recepción Oficial & Atención 24 Horas",
+      category: "Recepción & Hall",
     },
     {
       id: "habitacion-matrimonial",
@@ -59,17 +52,10 @@ export default function Gallery() {
       category: "Arquitectura & Pasillos",
     },
     {
-      id: "pasillos-habitaciones",
-      src: "/assets/images/hotel/pasillos-habitaciones.jpg",
-      alt: "Pasillo de acceso a las 23 habitaciones con pisos brillantes y ventilación",
-      caption: "Pasillo de Acceso a Habitaciones",
-      category: "Arquitectura & Pasillos",
-    },
-    {
       id: "pasillos-habitaciones-2",
       src: "/assets/images/hotel/pasillos-habitaciones-2.jpg",
-      alt: "Corredor de habitaciones de Hotel Punto Aparte Quibdó",
-      caption: "Corredor y Circulación Interna",
+      alt: "Corredor y circulación interna de Hotel Punto Aparte Quibdó",
+      caption: "Corredores & Circulación Interna",
       category: "Arquitectura & Pasillos",
     },
   ];
@@ -91,8 +77,8 @@ export default function Gallery() {
           </p>
         </div>
 
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Gallery Grid (3 columns on desktop, 2 on tablet, 1 on mobile) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {galleryItems.map((item) => (
             <div
               key={item.id}

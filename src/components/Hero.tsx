@@ -67,7 +67,7 @@ export default function Hero() {
       {/* Background Image with Next/Image */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <Image
-          src="/assets/images/hotel/recepcion-amplia.jpg"
+          src="/assets/images/hotel/recepcion-oficial-hotel.jpg"
           alt="Lobby y Recepción Real de Hotel Punto Aparte Quibdó"
           fill
           priority

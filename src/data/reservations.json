@@ -1,0 +1,277 @@
+[
+  {
+    "reference": "FACT-2026-9149",
+    "customerName": "Daniel Andres Suarez Ramirez",
+    "items": [
+      {
+        "roomId": "sencilla-ventilador",
+        "quantity": 1
+      }
+    ],
+    "checkIn": "2026-09-02",
+    "checkOut": "2026-09-03",
+    "status": "CONFIRMED",
+    "id": "RES-1788322713517-1065",
+    "createdAt": "2026-09-02T04:18:33.517Z"
+  },
+  {
+    "reference": "FACT-2026-7019",
+    "customerName": "Juan Camilo Valencia",
+    "documentType": "CC",
+    "documentNumber": "1077589632",
+    "phone": "3104567890",
+    "email": "juancamilo@example.com",
+    "paymentMethod": "Transferencia Nequi / Bancolombia / PSE",
+    "specialRequests": "Llegada a las 4pm",
+    "totalAmount": 280000,
+    "items": [
+      {
+        "roomId": "doble-ac",
+        "roomName": "Habitación Doble con Aire Acondicionado",
+        "quantity": 1,
+        "pricePerNight": 140000
+      }
+    ],
+    "checkIn": "2026-09-10",
+    "checkOut": "2026-09-12",
+    "nights": 2,
+    "status": "EXPIRED",
+    "id": "RES-1788324422299-7031",
+    "createdAt": "2026-09-02T04:47:02.299Z",
+    "expiresAt": "2026-09-02T05:47:02.299Z"
+  },
+  {
+    "reference": "FACT-2026-7337",
+    "customerName": "Daniel Andres Suarez Ramirez",
+    "documentType": "CC",
+    "documentNumber": "123156151",
+    "phone": "3212305681",
+    "email": "danielandres2907@gmail.com",
+    "paymentMethod": "Transferencia Nequi / Bancolombia / PSE",
+    "specialRequests": "",
+    "totalAmount": 80000,
+    "items": [
+      {
+        "roomId": "sencilla-ac",
+        "roomName": "Habitación Sencilla con Aire Acondicionado",
+        "quantity": 1,
+        "pricePerNight": 80000
+      }
+    ],
+    "checkIn": "2026-09-02",
+    "checkOut": "2026-09-03",
+    "nights": 1,
+    "status": "EXPIRED",
+    "id": "RES-1788324524326-9511",
+    "createdAt": "2026-09-02T04:48:44.326Z",
+    "expiresAt": "2026-09-02T05:48:44.326Z"
+  },
+  {
+    "reference": "FACT-2026-6995",
+    "customerName": "Juan Camilo Valencia",
+    "documentType": "CC",
+    "documentNumber": "1077589632",
+    "phone": "3104567890",
+    "email": "juancamilo@example.com",
+    "paymentMethod": "Cuenta de Ahorros Bancolombia",
+    "specialRequests": "Llegada a las 4pm",
+    "totalAmount": 280000,
+    "items": [
+      {
+        "roomId": "doble-ac",
+        "roomName": "Habitación Doble con Aire Acondicionado",
+        "quantity": 1,
+        "pricePerNight": 140000
+      }
+    ],
+    "checkIn": "2026-09-10",
+    "checkOut": "2026-09-12",
+    "nights": 2,
+    "status": "EXPIRED",
+    "id": "RES-1788324798695-5725",
+    "createdAt": "2026-09-02T04:53:18.695Z",
+    "expiresAt": "2026-09-02T05:53:18.695Z"
+  },
+  {
+    "reference": "FACT-2026-5791",
+    "customerName": "Daniel Andres Suarez Ramirez",
+    "documentType": "CC",
+    "documentNumber": "135165315",
+    "phone": "3212305681",
+    "email": "dansuarezra@unal.edu.co",
+    "paymentMethod": "Cuenta de Ahorros Bancolombia",
+    "specialRequests": "kajss",
+    "totalAmount": 80000,
+    "items": [
+      {
+        "roomId": "sencilla-ac",
+        "roomName": "Habitación Sencilla con Aire Acondicionado",
+        "quantity": 1,
+        "pricePerNight": 80000
+      }
+    ],
+    "checkIn": "2026-09-02",
+    "checkOut": "2026-09-03",
+    "nights": 1,
+    "status": "EXPIRED",
+    "id": "RES-1788326727403-8687",
+    "createdAt": "2026-09-02T05:25:27.403Z",
+    "expiresAt": "2026-09-02T06:25:27.403Z"
+  },
+  {
+    "reference": "FACT-2026-6078",
+    "customerName": "Juan Camilo Valencia",
+    "documentType": "CC",
+    "documentNumber": "1077589632",
+    "phone": "3104567890",
+    "email": "juancamilo@example.com",
+    "paymentMethod": "Cuenta de Ahorros Bancolombia",
+    "specialRequests": "Llegada a las 4pm",
+    "totalAmount": 280000,
+    "items": [
+      {
+        "roomId": "doble-ac",
+        "roomName": "Habitación Doble con Aire Acondicionado",
+        "quantity": 1,
+        "pricePerNight": 140000
+      }
+    ],
+    "checkIn": "2026-09-10",
+    "checkOut": "2026-09-12",
+    "nights": 2,
+    "status": "EXPIRED",
+    "id": "RES-1788327087641-9916",
+    "createdAt": "2026-09-02T05:31:27.641Z",
+    "expiresAt": "2026-09-02T06:31:27.641Z"
+  },
+  {
+    "reference": "FACT-2026-1206",
+    "customerName": "Daniel Andres Suarez Ramirez",
+    "documentType": "CC",
+    "documentNumber": "165165165",
+    "phone": "3212305681",
+    "email": "danielandres2907@gmail.com",
+    "paymentMethod": "Cuenta de Ahorros Bancolombia",
+    "specialRequests": "",
+    "totalAmount": 80000,
+    "items": [
+      {
+        "roomId": "sencilla-ac",
+        "roomName": "Habitación Sencilla con Aire Acondicionado",
+        "quantity": 1,
+        "pricePerNight": 80000
+      }
+    ],
+    "checkIn": "2026-09-02",
+    "checkOut": "2026-09-03",
+    "nights": 1,
+    "status": "CANCELLED",
+    "id": "RES-1788327158093-6961",
+    "createdAt": "2026-09-02T05:32:38.093Z",
+    "expiresAt": "2026-09-02T06:32:38.093Z"
+  },
+  {
+    "reference": "FACT-2026-4573",
+    "customerName": "Juan Camilo Valencia",
+    "documentType": "CC",
+    "documentNumber": "1077589632",
+    "phone": "3104567890",
+    "email": "juancamilo@example.com",
+    "paymentMethod": "Cuenta de Ahorros Bancolombia",
+    "specialRequests": "Llegada a las 4pm",
+    "totalAmount": 280000,
+    "items": [
+      {
+        "roomId": "doble-ac",
+        "roomName": "Habitación Doble con Aire Acondicionado",
+        "quantity": 1,
+        "pricePerNight": 140000
+      }
+    ],
+    "checkIn": "2026-09-10",
+    "checkOut": "2026-09-12",
+    "nights": 2,
+    "status": "CANCELLED",
+    "id": "RES-1788329956264-5673",
+    "createdAt": "2026-09-02T06:19:16.264Z",
+    "expiresAt": "2026-09-02T07:19:16.264Z"
+  },
+  {
+    "reference": "FACT-2026-4489",
+    "customerName": "ksopqspkmd",
+    "documentType": "CC",
+    "documentNumber": "654154651",
+    "phone": "21651651651",
+    "email": "dansuarezra@unal.edu.co",
+    "paymentMethod": "Cuenta de Ahorros Bancolombia",
+    "specialRequests": "",
+    "totalAmount": 200000,
+    "items": [
+      {
+        "roomId": "doble-ventilador",
+        "roomName": "Habitación Doble con Ventilador",
+        "quantity": 2,
+        "pricePerNight": 100000
+      }
+    ],
+    "checkIn": "2026-09-02",
+    "checkOut": "2026-09-03",
+    "nights": 1,
+    "status": "CANCELLED",
+    "id": "RES-1788332339296-5524",
+    "createdAt": "2026-09-02T06:58:59.296Z",
+    "expiresAt": "2026-09-02T07:58:59.296Z"
+  },
+  {
+    "reference": "FACT-2026-8420",
+    "customerName": "Daniel Andres Suarez Ramirez",
+    "documentType": "CC",
+    "documentNumber": "1029981276",
+    "phone": "3212305681",
+    "email": "danielandres2907@gmail.com",
+    "paymentMethod": "Cuenta de Ahorros Bancolombia",
+    "specialRequests": "",
+    "totalAmount": 140000,
+    "items": [
+      {
+        "roomId": "doble-ac",
+        "roomName": "Habitación Doble con Aire Acondicionado",
+        "quantity": 1,
+        "pricePerNight": 140000
+      }
+    ],
+    "checkIn": "2026-09-02",
+    "checkOut": "2026-09-03",
+    "nights": 1,
+    "status": "CONFIRMED",
+    "id": "RES-1788355439944-9586",
+    "createdAt": "2026-09-02T13:23:59.944Z",
+    "expiresAt": "2026-09-02T14:23:59.944Z"
+  },
+  {
+    "reference": "FACT-2026-8928",
+    "customerName": "Daniel Andres Suarez Ramirez",
+    "documentType": "CC",
+    "documentNumber": "1029981276",
+    "phone": "3212305681",
+    "email": "danielandres2907@gmai.com",
+    "paymentMethod": "Cuenta de Ahorros Bancolombia",
+    "specialRequests": "",
+    "totalAmount": 100000,
+    "items": [
+      {
+        "roomId": "doble-ventilador",
+        "roomName": "Habitación Doble con Ventilador",
+        "quantity": 1,
+        "pricePerNight": 100000
+      }
+    ],
+    "checkIn": "2026-09-03",
+    "checkOut": "2026-09-04",
+    "nights": 1,
+    "status": "CONFIRMED",
+    "id": "RES-1788413707956-8580",
+    "createdAt": "2026-09-03T05:35:07.956Z",
+    "expiresAt": "2026-09-03T06:35:07.956Z"
+  }
+]

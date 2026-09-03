@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Sparkles, ShieldCheck, Clock, HeartHandshake, Info, Maximize2, X, ChevronRight, LucideIcon } from "lucide-react";
+import { Sparkles, ShieldCheck, Clock, HeartHandshake, Info, Maximize2, X, ChevronRight, LucideIcon, Tv, Wifi, Armchair, Coffee } from "lucide-react";
 import { HOTEL_CONFIG } from "@/data/config";
 
 interface Hotspot {
@@ -22,43 +22,43 @@ export default function LobbyShowcase() {
   const hotspots: Hotspot[] = [
     {
       id: 1,
-      x: 52,
-      y: 18,
-      title: "Pérgola & Vegetación Suspendida",
-      subtitle: "Diseño & Calidez",
+      x: 38,
+      y: 60,
+      title: "Sala de Estar & Sala Lounge",
+      subtitle: "Confort & Descanso",
       description:
-        "Estructura superior de pergolado artesanal en madera con luminarias focalizadas y follaje verde natural que llena el hall de frescura.",
-      icon: Sparkles,
+        "Espacio equipado con sofás confortables y mesa de centro para relajarte, recibir visitas o esperar tu check-in cómodamente.",
+      icon: Armchair,
     },
     {
       id: 2,
-      x: 44,
-      y: 55,
-      title: "Mostrador Principal & Atención 24/7",
-      subtitle: "Recepción Personalizada",
+      x: 62,
+      y: 35,
+      title: "Smart TV & Entretenimiento",
+      subtitle: "Información & Noticias",
       description:
-        "Atención continua las 24 horas del día. Nuestro equipo te recibe con la calidez del Chocó y gestiona tu Check-in Express.",
-      icon: Clock,
+        "Pantalla Smart TV con canales y contenido multimedia disponible en el hall para el disfrute de todos los huéspedes.",
+      icon: Tv,
     },
     {
       id: 3,
-      x: 58,
-      y: 48,
-      title: "Tablero de Llaves & Custodia",
-      subtitle: "Seguridad Permanente",
+      x: 78,
+      y: 65,
+      title: "Zona Wi-Fi de Alta Velocidad",
+      subtitle: "Conectividad Total",
       description:
-        "Módulo de custodia con iluminación LED azul, control de accesos y resguardo seguro de pertenecias para todos los huéspedes.",
-      icon: ShieldCheck,
+        "Internet inalámbrico de alta velocidad en todas las áreas comunes del hotel para trabajar o comunicarte sin interrupciones.",
+      icon: Wifi,
     },
     {
       id: 4,
-      x: 12,
-      y: 55,
-      title: "Columna Decorativa con Hiedra",
-      subtitle: "Arquitectura & Naturaleza",
+      x: 20,
+      y: 30,
+      title: "Ambiente Climatizado & Acogedor",
+      subtitle: "Calidez Chocoana",
       description:
-        "Detalles estructurales revestidos con plantas naturales que conectan la entrada principal con las áreas de circulación del hotel.",
-      icon: HeartHandshake,
+        "Diseño fresco y ventilado con detalles en madera natural que brindan una atmósfera de desconexión en pleno centro de Quibdó.",
+      icon: Coffee,
     },
   ];
 
@@ -72,13 +72,13 @@ export default function LobbyShowcase() {
         <div className="text-center mb-14">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card border border-gold-500/40 text-xs tracking-widest uppercase text-gold-400 mb-4">
             <Sparkles className="w-3.5 h-3.5 text-gold-400" />
-            Experiencia en Recepción
+            Zonas Comunes & Hall
           </span>
           <h2 className="font-heading text-3xl sm:text-5xl font-bold text-white mb-6">
-            Nuestra <span className="text-gold-gradient">Recepción & Lobby Real</span>
+            Nuestro <span className="text-gold-gradient">Lobby & Sala de Estar Real</span>
           </h2>
           <p className="text-base sm:text-lg text-neutral-gray max-w-3xl mx-auto font-light leading-relaxed">
-            Toca o pasa el cursor sobre los puntos dorados de la foto original para explorar la atención y comodidades de nuestro hall principal.
+            Toca o pasa el cursor sobre los puntos dorados de la foto original para explorar la comodidad y servicios de nuestro lobby principal.
           </p>
         </div>
 
@@ -89,8 +89,8 @@ export default function LobbyShowcase() {
             {/* Real User Lobby Photo */}
             <div className="relative w-full h-[380px] sm:h-[500px] lg:h-[540px]">
               <Image
-                src="/assets/images/hotel/recepcion.jpg"
-                alt="Recepción real de Hotel Punto Aparte Quibdó con detalles interactivos"
+                src="/assets/images/hotel/lobby-zona-estar.jpg"
+                alt="Lobby y sala de estar real de Hotel Punto Aparte Quibdó con detalles interactivos"
                 fill
                 priority
                 quality={85}
@@ -111,7 +111,7 @@ export default function LobbyShowcase() {
                   <button
                     onClick={() => setActiveHotspot(activeHotspot?.id === spot.id ? null : spot)}
                     onMouseEnter={() => setActiveHotspot(spot)}
-                    className={`relative flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-full transition-all duration-300 focus:outline-none ${
+                    className={`relative flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-full transition-all duration-300 focus:outline-none cursor-pointer ${
                       activeHotspot?.id === spot.id
                         ? "bg-orange-brand text-white scale-125 shadow-lg shadow-orange-brand/50 ring-4 ring-white/40"
                         : "bg-dark-bg/90 border border-gold-400/80 text-gold-400 hover:scale-110 hover:bg-gold-500 hover:text-dark-bg shadow-xl"
@@ -136,7 +136,7 @@ export default function LobbyShowcase() {
               {/* Expand Fullscreen Button */}
               <button
                 onClick={() => setIsFullModalOpen(true)}
-                className="absolute top-4 right-4 z-10 p-3 rounded-2xl glass-card border border-white/20 text-white hover:text-gold-400 hover:border-gold-500 transition-all shadow-lg"
+                className="absolute top-4 right-4 z-10 p-3 rounded-2xl glass-card border border-white/20 text-white hover:text-gold-400 hover:border-gold-500 transition-all shadow-lg cursor-pointer"
                 aria-label="Ver imagen ampliada"
                 title="Ampliar vista"
               >
@@ -176,10 +176,10 @@ export default function LobbyShowcase() {
                     <Info className="w-5 h-5" />
                   </div>
                   <h3 className="font-heading text-lg font-bold text-white">
-                    Puntos Destacados
+                    Puntos Destacados del Lobby
                   </h3>
                   <p className="text-xs sm:text-sm text-neutral-gray leading-relaxed font-light">
-                    Toca cualquiera de los 4 puntos dorados sobre la foto de recepción para conocer los detalles de diseño, comodidad y atención en nuestro hall principal.
+                    Toca cualquiera de los 4 puntos dorados sobre la foto del lobby para conocer los detalles de comodidad, entretenimiento y atención en nuestro hall principal.
                   </p>
                 </div>
               )}
@@ -236,7 +236,7 @@ export default function LobbyShowcase() {
           >
             <button
               onClick={() => setIsFullModalOpen(false)}
-              className="absolute top-4 right-4 z-30 p-3 rounded-full bg-dark-bg/80 border border-white/20 text-white hover:text-gold-400 transition-colors"
+              className="absolute top-4 right-4 z-30 p-3 rounded-full bg-dark-bg/80 border border-white/20 text-white hover:text-gold-400 transition-colors cursor-pointer"
               aria-label="Cerrar"
             >
               <X className="w-6 h-6" />
@@ -244,8 +244,8 @@ export default function LobbyShowcase() {
 
             <div className="relative w-full h-[65vh] sm:h-[75vh] rounded-2xl overflow-hidden">
               <Image
-                src="/assets/images/hotel/recepcion-amplia.jpg"
-                alt="Recepción Hotel Punto Aparte Quibdó"
+                src="/assets/images/hotel/lobby-zona-estar.jpg"
+                alt="Lobby y Sala de Estar Hotel Punto Aparte Quibdó"
                 fill
                 priority
                 quality={90}
@@ -255,7 +255,7 @@ export default function LobbyShowcase() {
             </div>
             <div className="text-center py-3">
               <span className="text-xs uppercase font-bold text-gold-400 tracking-wider">
-                Recepción & Hall de Bienvenida Real
+                Lobby & Sala de Estar para Huéspedes
               </span>
               <p className="text-sm text-neutral-gray font-light mt-0.5">
                 Calle 26 No. 5 - 37, Pasaje Peatonal Alameda Reyes — Quibdó, Chocó.

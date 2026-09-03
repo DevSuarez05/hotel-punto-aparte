@@ -1,6 +1,19 @@
 import { NextResponse } from "next/server";
 import { verifyWompiWebhookSignature } from "@/lib/wompi";
 import { HOTEL_CONFIG } from "@/data/config";
+import { sendPaymentApprovalNotificationToHotel } from "@/lib/whatsapp";
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, ngrok-skip-browser-warning, Bypass-Tunnel-Remainder, Authorization",
+    },
+  });
+}
 
 export async function POST(req: Request) {
   try {
@@ -31,20 +44,35 @@ export async function POST(req: Request) {
       `[WOMPI WEBHOOK] Transacción ${transactionId} | Ref: ${reference} | Monto: ${amount_in_cents / 100} COP | Estado: ${status} | Método: ${payment_method_type}`
     );
 
-    // Opcional: Verificación criptográfica de firma de webhook de Wompi si viene checksum
-    if (signature?.checksum) {
-      const isValid = verifyWompiWebhookSignature(
-        reference,
-        amount_in_cents,
-        currency,
-        status,
-        timestamp,
-        signature.checksum
+    // Verificación criptográfica obligatoria de firma de webhook de Wompi
+    const receivedChecksum = signature?.checksum;
+    if (!receivedChecksum) {
+      console.error(
+        `[WOMPI WEBHOOK SECURITY] ❌ Petición rechazada: Falta firma/checksum en el payload para transacción ${transactionId || "desconocida"}.`
       );
+      return NextResponse.json(
+        { success: false, error: "Unauthorized: Webhook signature is required" },
+        { status: 401 }
+      );
+    }
 
-      if (!isValid) {
-        console.warn("[WOMPI WEBHOOK] Advertencia: Checksum de webhook no coincide con clave secreta local (verificar WOMPI_EVENTS_SECRET).");
-      }
+    const isSignatureValid = verifyWompiWebhookSignature(
+      reference,
+      amount_in_cents,
+      currency,
+      status,
+      timestamp,
+      receivedChecksum
+    );
+
+    if (!isSignatureValid) {
+      console.error(
+        `[WOMPI WEBHOOK SECURITY] ❌ Petición rechazada: Checksum inválido o manipulado para referencia ${reference}.`
+      );
+      return NextResponse.json(
+        { success: false, error: "Unauthorized: Invalid webhook cryptographic signature" },
+        { status: 401 }
+      );
     }
 
     // LÓGICA DE NEGOCIO SEGÚN ESTADO DE LA TRANSACCIÓN
@@ -53,6 +81,19 @@ export async function POST(req: Request) {
       reservationStatus = "Confirmada (Pagada con Wompi Bancolombia)";
       console.log(
         `✅ [HOTEL PUNTO APARTE] Reserva ${reference} APROBADA y PAGADA con éxito vía ${payment_method_type}. Cliente: ${customer_email}`
+      );
+
+      // Disparar notificación automática a WhatsApp del Hotel
+      sendPaymentApprovalNotificationToHotel({
+        reference,
+        transactionId,
+        amountInCents: amount_in_cents,
+        currency,
+        paymentMethodType: payment_method_type,
+        customerEmail: customer_email,
+        timestamp: new Date().toLocaleString("es-CO"),
+      }).catch((err) =>
+        console.error("[WOMPI WEBHOOK] Error al enviar WhatsApp de pago aprobado:", err)
       );
     } else if (status === "DECLINED") {
       reservationStatus = "Rechazada por la Entidad";

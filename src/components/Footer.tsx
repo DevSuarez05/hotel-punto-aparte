@@ -1,3 +1,5 @@
+import Link from "next/link";
+import Image from "next/image";
 import { MapPin, Phone, Mail } from "lucide-react";
 import HotelLogo from "./HotelLogo";
 import { HOTEL_CONFIG } from "@/data/config";
@@ -163,19 +165,32 @@ export default function Footer() {
         <div className="pt-8 border-t border-white/10 flex flex-col lg:flex-row items-center justify-between gap-4 text-xs text-neutral-gray font-light text-center lg:text-left">
           <p>© {new Date().getFullYear()} {HOTEL_CONFIG.name} — {HOTEL_CONFIG.city}. Todos los derechos reservados.</p>
           
-          <div className="text-sm text-gray-500 my-2 lg:my-0">
-            Desarrollado por{' '}
+          <div className="flex items-center gap-2 text-xs text-neutral-gray my-2 lg:my-0">
+            <span>Desarrollado por</span>
             <a 
               href="https://github.com/DevSuarez05" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors duration-300 font-medium tracking-wide"
+              className="inline-flex items-center gap-2 text-neutral-light hover:text-white transition-all duration-300 font-semibold group px-2.5 py-1 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-red-500/40 shadow-sm"
+              title="Synthetix Automation — Software & Inteligencia Artificial"
             >
-              Synthetix Automation
+              <div className="relative w-5 h-5 rounded-md overflow-hidden shrink-0 border border-white/20 group-hover:scale-110 transition-transform">
+                <Image
+                  src="/assets/images/synthetix-logo.jpg"
+                  alt="Logo Synthetix Automation"
+                  fill
+                  sizes="20px"
+                  className="object-cover"
+                />
+              </div>
+              <span className="tracking-wide">Synthetix Automation</span>
             </a>
           </div>
 
           <div className="flex items-center gap-6">
+            <Link href="/admin/reservas" className="hover:text-gold-400 transition-colors flex items-center gap-1">
+              <span>Portal de Recepción</span>
+            </Link>
             <a href="#" className="hover:text-gold-400 transition-colors">
               Políticas de Privacidad
             </a>

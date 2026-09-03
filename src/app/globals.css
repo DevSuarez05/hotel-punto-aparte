@@ -48,28 +48,123 @@ body {
   overflow-x: hidden;
 }
 
-/* Print Styles for Invoice */
+/* Print Styles for Executive Colombian Hotel Invoice */
 @media print {
+  @page {
+    margin: 1.5cm;
+    size: A4 portrait;
+  }
+
+  /* Hide everything on body */
+  body * {
+    visibility: hidden !important;
+  }
+
   body {
-    background-color: #fff !important;
-    color: #000 !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  .no-print,
-  header,
-  footer,
-  nav,
-  .fixed {
-    display: none !important;
-  }
-  #printable-invoice {
-    background: #fff !important;
-    color: #000 !important;
-    border: 1px solid #ccc !important;
-    padding: 20px !important;
-  }
+
+  /* Make only the printable invoice and its children visible */
+  #printable-invoice,
   #printable-invoice * {
-    color: #000 !important;
-    background: transparent !important;
+    visibility: visible !important;
+  }
+
+  #printable-invoice {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+    border: 2px solid #111827 !important;
+    border-radius: 12px !important;
+    padding: 32px !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  /* Ensure text colors in invoice print in high-contrast dark tones */
+  #printable-invoice .text-white,
+  #printable-invoice .text-neutral-light,
+  #printable-invoice .text-neutral-gray,
+  #printable-invoice .text-gold-400,
+  #printable-invoice .text-gold-300,
+  #printable-invoice .text-yellow-300,
+  #printable-invoice .text-yellow-400,
+  #printable-invoice .text-emerald-300,
+  #printable-invoice .text-emerald-400,
+  #printable-invoice span,
+  #printable-invoice p,
+  #printable-invoice h2,
+  #printable-invoice h3,
+  #printable-invoice h4,
+  #printable-invoice td,
+  #printable-invoice th {
+    color: #111827 !important;
+    text-shadow: none !important;
+  }
+
+  #printable-invoice .invoice-total-amount {
+    color: #000000 !important;
+    font-size: 24pt !important;
+    font-weight: 900 !important;
+  }
+
+  #printable-invoice .bg-white\/5,
+  #printable-invoice .bg-dark-bg,
+  #printable-invoice .bg-yellow-500\/10,
+  #printable-invoice .bg-black\/40 {
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+
+  #printable-invoice table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin-top: 12px !important;
+    margin-bottom: 12px !important;
+  }
+
+  #printable-invoice th {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+    font-weight: 800 !important;
+    border: 1px solid #94a3b8 !important;
+    padding: 10px 12px !important;
+  }
+
+  #printable-invoice td {
+    border: 1px solid #cbd5e1 !important;
+    padding: 10px 12px !important;
+  }
+
+  .print-signatures {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 48px !important;
+    margin-top: 40px !important;
+    padding-top: 20px !important;
+  }
+
+  .print-logo {
+    background: #111827 !important;
+    color: #ffffff !important;
+    border: 1px solid #000000 !important;
+  }
+
+  /* Hide buttons, floating links and non-printable elements */
+  .no-print,
+  button,
+  a {
+    display: none !important;
   }
 }
 

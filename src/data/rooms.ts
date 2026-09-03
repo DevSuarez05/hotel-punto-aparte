@@ -186,7 +186,7 @@ export const roomsData: Room[] = [
       "room_service_24_7",
       "anti_seismic",
     ],
-    image: "/assets/images/hotel/habitacion-matrimonial.jpg",
+    image: "/assets/images/hotel/habitacion-doble-ac.jpg",
     services: [
       "Aire Acondicionado Climatizado de Alta Eficiencia",
       "Wi-Fi ultrarrápido de alta velocidad",
@@ -330,7 +330,7 @@ export const roomsData: Room[] = [
       "room_service_24_7",
       "anti_seismic",
     ],
-    image: "/assets/images/hotel/habitacion-doble-sencilla.jpg",
+    image: "/assets/images/hotel/habitacion-sencilla-ventilador.jpg",
     services: [
       "Ventilador de Alta Potencia",
       "Wi-Fi ultrarrápido",

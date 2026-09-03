@@ -135,10 +135,23 @@ export default function CartDrawer() {
                 Explora nuestras habitaciones y selecciona la mejor opción para tu viaje a Quibdó.
               </p>
               <button
-                onClick={() => setIsCartOpen(false)}
-                className="mt-2 px-5 py-2.5 rounded-xl bg-gold-gradient text-dark-bg font-bold text-xs hover:scale-105 transition-all"
+                onClick={() => {
+                  setIsCartOpen(false);
+                  setTimeout(() => {
+                    const element = document.getElementById("habitaciones");
+                    if (element) {
+                      const yOffset = -80;
+                      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                      window.scrollTo({ top: y, behavior: "smooth" });
+                    } else {
+                      window.location.hash = "habitaciones";
+                    }
+                  }, 150);
+                }}
+                className="mt-2 px-6 py-3 rounded-xl bg-gold-gradient text-dark-bg font-bold text-xs hover:scale-105 active:scale-95 transition-all shadow-lg shadow-gold-500/20 cursor-pointer flex items-center gap-2"
               >
-                Ver Habitaciones
+                <span>Ver Habitaciones</span>
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           ) : (
