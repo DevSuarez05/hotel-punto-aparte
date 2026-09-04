@@ -60,7 +60,7 @@ export default function LocationMap() {
                   </span>
                   <p className="text-base font-bold text-white leading-snug">
                     Calle 26 No. 5 - 37 <br />
-                    <span className="text-gold-400 font-normal">entre Cra. 5 y 6</span>
+                    <span className="text-gold-400 font-normal">entre Cra. 5 y Cra. 6 — Pasaje Alameda Reyes</span>
                   </p>
                   <p className="text-xs text-neutral-gray mt-1 font-light">
                     Pasaje peatonal Alameda Reyes — Quibdó, Chocó.
@@ -132,7 +132,7 @@ export default function LocationMap() {
             {/* Embedded Iframe */}
             <iframe
               title="Mapa interactivo de ubicación Hotel Punto Aparte Quibdó"
-              src="https://maps.google.com/maps?q=Calle%2026%20No.%205%20-%2037%20Quibdo%20Choco&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              src="https://maps.google.com/maps?q=5.68925,-76.6568&t=&z=18&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="100%"
               style={{

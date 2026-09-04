@@ -31,7 +31,7 @@ export const HOTEL_CONFIG = {
   },
   
   googleMapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=Calle+26+No.+5+-+37+Quibdo+Choco+Pasaje+Alameda+Reyes",
+    "https://www.google.com/maps?q=5.68925,-76.6568",
 } as const;
 
 /**

@@ -186,7 +186,7 @@ export const roomsData: Room[] = [
       "room_service_24_7",
       "anti_seismic",
     ],
-    image: "/assets/images/hotel/habitacion-doble-ac.jpg",
+    image: "/assets/images/rooms-update/doble-ac.jpg",
     services: [
       "Aire Acondicionado Climatizado de Alta Eficiencia",
       "Wi-Fi ultrarrápido de alta velocidad",
@@ -234,7 +234,7 @@ export const roomsData: Room[] = [
       "room_service_24_7",
       "anti_seismic",
     ],
-    image: "/assets/images/hotel/habitacion-doble-sencilla.jpg",
+    image: "/assets/images/rooms-update/doble-ventilador.jpg",
     services: [
       "Ventilador de Techo / Alto Caudal",
       "Wi-Fi ultrarrápido",
@@ -263,8 +263,8 @@ export const roomsData: Room[] = [
     name: "Habitación Sencilla con Aire Acondicionado",
     category: "Categoría C · Sencilla Ejecutiva A/C",
     tagline: "El espacio ideal e insonorizado para el viajero de negocios o descanso individual de primer nivel.",
-    priceNumeric: 80000,
-    pricePerNight: formatCOP(80000),
+    priceNumeric: 100000,
+    pricePerNight: formatCOP(100000),
     capacity: "1 - 2 Personas",
     maxCapacityNumber: 2,
     size: "24 m²",
@@ -283,7 +283,7 @@ export const roomsData: Room[] = [
       "safe_box",
       "anti_seismic",
     ],
-    image: "/assets/images/hotel/habitacion-matrimonial.jpg",
+    image: "/assets/images/rooms-update/sencilla-ac.jpg",
     services: [
       "Aire Acondicionado Insonorizado",
       "Wi-Fi ultrarrápido simétrico",
@@ -301,9 +301,9 @@ export const roomsData: Room[] = [
     ],
     whatsappMessage: buildWhatsAppBookingMessage({
       roomName: "Habitación Sencilla con Aire Acondicionado (Categoría C)",
-      pricePerNight: 80000,
+      pricePerNight: 100000,
       nights: 1,
-      totalAmount: 80000,
+      totalAmount: 100000,
     }),
   },
   {
@@ -312,8 +312,8 @@ export const roomsData: Room[] = [
     name: "Habitación Sencilla con Ventilador",
     category: "Categoría D · Sencilla Estándar Ventilador",
     tagline: "Alojamiento práctico, limpio y acogedor para estancias ejecutivas o estadías de paso.",
-    priceNumeric: 70000,
-    pricePerNight: formatCOP(70000),
+    priceNumeric: 80000,
+    pricePerNight: formatCOP(80000),
     capacity: "1 - 2 Personas",
     maxCapacityNumber: 2,
     size: "22 m²",
@@ -330,7 +330,7 @@ export const roomsData: Room[] = [
       "room_service_24_7",
       "anti_seismic",
     ],
-    image: "/assets/images/hotel/habitacion-sencilla-ventilador.jpg",
+    image: "/assets/images/rooms-update/doble-ventilador.jpg",
     services: [
       "Ventilador de Alta Potencia",
       "Wi-Fi ultrarrápido",
@@ -348,9 +348,9 @@ export const roomsData: Room[] = [
     ],
     whatsappMessage: buildWhatsAppBookingMessage({
       roomName: "Habitación Sencilla con Ventilador (Categoría D)",
-      pricePerNight: 70000,
+      pricePerNight: 80000,
       nights: 1,
-      totalAmount: 70000,
+      totalAmount: 80000,
     }),
   },
 ];
