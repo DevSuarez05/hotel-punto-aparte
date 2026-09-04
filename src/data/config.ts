@@ -31,7 +31,7 @@ export const HOTEL_CONFIG = {
   },
   
   googleMapsUrl:
-    "https://www.google.com/maps?q=5.68925,-76.6568",
+    "https://www.google.com/maps?q=5.68985,-76.65695",
 } as const;
 
 /**

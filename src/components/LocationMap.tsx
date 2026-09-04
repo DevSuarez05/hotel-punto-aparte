@@ -132,7 +132,7 @@ export default function LocationMap() {
             {/* Embedded Iframe */}
             <iframe
               title="Mapa interactivo de ubicación Hotel Punto Aparte Quibdó"
-              src="https://maps.google.com/maps?q=5.68925,-76.6568&t=&z=18&ie=UTF8&iwloc=&output=embed"
+              src="https://maps.google.com/maps?q=5.68985,-76.65695&t=&z=18&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="100%"
               style={{
